@@ -25,4 +25,14 @@ userRouter.delete("/:userId", async (req: Request, res: Response) => {
     return res.json(deletedUser);
 });
 
+userRouter.patch("/:userId", async (req: Request, res: Response) => {
+    const userToUpdate: User = new User({
+        userId: req.params.userId,
+        name: req.body.name,
+        age: req.body.age
+    });
+    const updatedUser: CustomResponse = await userService.updateUser(userToUpdate);
+    return res.json(updatedUser);
+});
+
 export default userRouter;

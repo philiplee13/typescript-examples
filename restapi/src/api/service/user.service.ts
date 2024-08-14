@@ -6,6 +6,7 @@ interface UserServiceInterface {
     getUsers(): Promise<CustomResponse>;
     addUser(body: User): Promise<CustomResponse>;
     deleteUser(userId: number): Promise<CustomResponse>;
+    updateUser(body: User): Promise<CustomResponse>;
 }
 
 class UserService implements UserServiceInterface {
@@ -59,6 +60,26 @@ class UserService implements UserServiceInterface {
             responseCode: 500
         });
     }
+
+    async updateUser(body: User): Promise<CustomResponse> {
+        const result = await pool.query(
+            `UPDATEE users.user SET name = $1, age = $2 WHERE user_id = $3`,
+            [body.name, body.age, body.userId]
+        );
+
+        if (result.rowCount === 1) {
+            const response = new CustomResponse({
+                message: `Successfully updated user`,
+                responseCode: 200
+            });
+            return response;
+        };
+
+        return new CustomResponse({
+            message: `Did not update user`,
+            responseCode: 500
+        });
+    };
 
 
 }
