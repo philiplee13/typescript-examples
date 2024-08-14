@@ -9,13 +9,16 @@ userRouter.get("/", async (req, res) => {
     return res.json(userList);
 });
 userRouter.post("/", async (req, res) => {
-    const userToCreate = new user_models_1.User(req.body.userId, req.body.name, req.body.age);
+    const userToCreate = new user_models_1.User({
+        name: req.body.name,
+        age: req.body.age,
+    });
     const createdUser = await user_service_1.userService.addUser(userToCreate);
     return res.json(createdUser);
 });
 userRouter.delete("/:userId", async (req, res) => {
     const userId = parseInt(req.params.userId);
-    const deletedUser = user_service_1.userService.deleteUser(userId);
+    const deletedUser = await user_service_1.userService.deleteUser(userId);
     return res.json(deletedUser);
 });
 exports.default = userRouter;

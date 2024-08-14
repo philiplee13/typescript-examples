@@ -1,45 +1,63 @@
 import { User, mapUsers } from "../models/user.models";
 import { pool } from "../../config/db";
+import { CustomResponse } from "../models/responses/response.model";
 
 interface UserServiceInterface {
-    getUsers(): Promise<User[]>;
-    addUser(body: User): Promise<boolean>;
-    deleteUser(userId: number): Promise<boolean>;
+    getUsers(): Promise<CustomResponse>;
+    addUser(body: User): Promise<CustomResponse>;
+    deleteUser(userId: number): Promise<CustomResponse>;
 }
 
 class UserService implements UserServiceInterface {
-    async getUsers(): Promise<User[]> {
+    async getUsers(): Promise<CustomResponse> {
         const result = await pool.query("SELECT * FROM users.user;");
         const users: User[] = result.rows;
         const userList = mapUsers(users);
-        return userList;
+        const response = new CustomResponse({
+            message: "Successfully got all users",
+            responseCode: 200,
+            data: userList
+        });
+        return response;
     };
 
-    async addUser(user: User): Promise<boolean> {
+    async addUser(user: User): Promise<CustomResponse> {
         const result = await pool.query(
             `INSERT INTO users.user (name, age) VALUES ($1, $2) returning user_id;`,
             [user.name, user.age]);
 
         if (result.rowCount === 1) {
             console.log(`Successfully created user with name ${user.name}`);
-            return true; // in general return custom response object here
-            // like a class with description, user details entered, etc
-            // but for now this is fine
+            const response = new CustomResponse({
+                message: `Successfully created user with name ${user.name}`,
+                responseCode: 200
+            })
+            return response;
         }
-        return false;
+        return new CustomResponse({
+            message: `Could not add user with name ${user.name}`,
+            responseCode: 500
+        });
     }
 
-    async deleteUser(userId: number): Promise<boolean> {
+    async deleteUser(userId: number): Promise<CustomResponse> {
         const result = await pool.query(
             `DELETE FROM users.user WHERE user_id = $1`, [userId]
         );
 
         if (result.rowCount === 1) {
             console.log(`Successfully deleted user with userId ${userId}`);
-            return true;
+            const response = new CustomResponse({
+                message: `Successfully deleted user ${userId}`,
+                responseCode: 200
+            });
+            return response
         };
-        console.log(`No user with ${userId} was found`);
-        return false;
+
+        return new CustomResponse({
+            message: `Could not delete user with userId of ${userId}`,
+            responseCode: 500
+        });
     }
 
 
