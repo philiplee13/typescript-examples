@@ -11,34 +11,51 @@ interface UserServiceInterface {
 
 class UserService implements UserServiceInterface {
     async getUsers(): Promise<CustomResponse> {
-        const result = await pool.query("SELECT * FROM users.user;");
-        const users: User[] = result.rows;
-        const userList = mapUsers(users);
-        const response = new CustomResponse({
-            message: "Successfully got all users",
-            responseCode: 200,
-            data: userList
-        });
-        return response;
+        try {
+            const result = await pool.query("SELECT * FROM users.user;");
+            const users: User[] = result.rows;
+            const userList = mapUsers(users);
+            const response = new CustomResponse({
+                message: "Successfully got all users",
+                responseCode: 200,
+                data: userList
+            });
+            return response;
+        } catch (error) {
+            return new CustomResponse({
+                message: `Error happened ${error}`,
+                responseCode: 500
+            });
+        }
     };
 
     async addUser(user: User): Promise<CustomResponse> {
-        const result = await pool.query(
-            `INSERT INTO users.user (name, age) VALUES ($1, $2) returning user_id;`,
-            [user.name, user.age]);
+        try {
+            const result = await pool.query(
+                `INSERT users.user (name, age) VALUES ($1, $2) returning user_id;`,
+                [user.name, user.age]);
 
-        if (result.rowCount === 1) {
-            console.log(`Successfully created user with name ${user.name}`);
-            const response = new CustomResponse({
-                message: `Successfully created user with name ${user.name}`,
-                responseCode: 200
-            })
-            return response;
+            if (result.rowCount === 1) {
+                console.log(`Successfully created user with name ${user.name}`);
+                const response = new CustomResponse({
+                    message: `Successfully created user with name ${user.name}`,
+                    responseCode: 200
+                })
+                return response;
+            }
+
+            // prob needs to be a check before anything happens like PK validation
+            return new CustomResponse({
+                message: `Could not add user with name ${user.name}`,
+                responseCode: 500
+            });
+
+        } catch (error) {
+            return new CustomResponse({
+                message: `Error happened when trying to add user ${error}`,
+                responseCode: 500
+            });
         }
-        return new CustomResponse({
-            message: `Could not add user with name ${user.name}`,
-            responseCode: 500
-        });
     }
 
     async deleteUser(userId: number): Promise<CustomResponse> {
