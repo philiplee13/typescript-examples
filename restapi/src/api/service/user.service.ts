@@ -63,7 +63,7 @@ class UserService implements UserServiceInterface {
 
     async updateUser(body: User): Promise<CustomResponse> {
         const result = await pool.query(
-            `UPDATEE users.user SET name = $1, age = $2 WHERE user_id = $3`,
+            `UPDATE users.user SET name = $1, age = $2 WHERE user_id = $3`,
             [body.name, body.age, body.userId]
         );
 

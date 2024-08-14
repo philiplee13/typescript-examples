@@ -21,4 +21,13 @@ userRouter.delete("/:userId", async (req, res) => {
     const deletedUser = await user_service_1.userService.deleteUser(userId);
     return res.json(deletedUser);
 });
+userRouter.patch("/:userId", async (req, res) => {
+    const userToUpdate = new user_models_1.User({
+        userId: req.params.userId,
+        name: req.body.name,
+        age: req.body.age
+    });
+    const updatedUser = await user_service_1.userService.updateUser(userToUpdate);
+    return res.json(updatedUser);
+});
 exports.default = userRouter;

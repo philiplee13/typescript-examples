@@ -48,5 +48,21 @@ class UserService {
             responseCode: 500
         });
     }
+    async updateUser(body) {
+        const result = await db_1.pool.query(`UPDATE users.user SET name = $1, age = $2 WHERE user_id = $3`, [body.name, body.age, body.userId]);
+        if (result.rowCount === 1) {
+            const response = new response_model_1.CustomResponse({
+                message: `Successfully updated user`,
+                responseCode: 200
+            });
+            return response;
+        }
+        ;
+        return new response_model_1.CustomResponse({
+            message: `Did not update user`,
+            responseCode: 500
+        });
+    }
+    ;
 }
 exports.userService = new UserService();
