@@ -25,9 +25,10 @@ userRouter.patch("/:userId", async (req, res) => {
     const userToUpdate = new user_models_1.User({
         userId: req.params.userId,
         name: req.body.name,
-        age: req.body.age
+        age: req.body.age,
     });
-    const updatedUser = await user_service_1.userService.updateUser(userToUpdate);
+    const updatedUser =
+        await user_service_1.userService.updateUser(userToUpdate);
     return res.json(updatedUser);
 });
 exports.default = userRouter;

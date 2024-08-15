@@ -11,12 +11,12 @@ export class User implements UserInterface {
 
     // obj constructor
     constructor(options: UserInterface) {
-        if (typeof options.userId !== 'undefined' && options.userId !== null) {
+        if (typeof options.userId !== "undefined" && options.userId !== null) {
             this.userId = options.userId;
-        };
+        }
         this.name = options.name;
         this.age = options.age;
-    };
+    }
 }
 
 // row mapper
@@ -24,11 +24,13 @@ export function mapUsers(queryResults: any[]): User[] {
     let results: User[] = [];
     for (let i: number = 0; i < queryResults.length; i++) {
         const user = queryResults[i];
-        results.push(new User({
-            userId: user.user_id,
-            name: user.name,
-            age: user.age
-        }));
+        results.push(
+            new User({
+                userId: user.user_id,
+                name: user.name,
+                age: user.age,
+            })
+        );
     }
     return results;
 }

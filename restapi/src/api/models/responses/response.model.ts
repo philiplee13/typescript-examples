@@ -2,7 +2,7 @@ interface ResponseInterface {
     message: string;
     responseCode: number;
     data?: any[];
-};
+}
 
 export class CustomResponse implements ResponseInterface {
     public message: string;
@@ -15,5 +15,5 @@ export class CustomResponse implements ResponseInterface {
         }
         this.message = options.message;
         this.responseCode = options.responseCode;
-    };
-};
+    }
+}
