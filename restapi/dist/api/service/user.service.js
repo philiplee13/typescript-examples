@@ -36,6 +36,7 @@ class UserService {
                 });
                 return response;
             }
+            // prob needs to be a check before anything happens like PK validation
             return new response_model_1.CustomResponse({
                 message: `Could not add user with name ${user.name}`,
                 responseCode: 500

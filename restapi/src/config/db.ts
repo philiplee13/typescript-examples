@@ -1,6 +1,10 @@
-import { Pool } from "pg"
+import { Pool } from "pg";
+import { config } from "dotenv";
 
-interface config {
+config(); // load config
+
+
+interface dbconfig {
     user: string;
     password: string;
     port: number;
@@ -8,7 +12,7 @@ interface config {
     ssl?: boolean;
 };
 
-const createPool = (dbconfig: config): Pool => {
+const createPool = (dbconfig: dbconfig): Pool => {
     const pool = new Pool({
         user: dbconfig.user,
         host: dbconfig.host,
@@ -19,12 +23,11 @@ const createPool = (dbconfig: config): Pool => {
 }
 
 
-
-const dbconfig: config = {
-    user: "postgres",
-    password: "postgres",
-    port: 5432,
-    host: "localhost",
+const dbconfig: dbconfig = {
+    user: process.env.DB_USERNAME || '',
+    password: process.env.DB_PASSWORD || '',
+    port: parseInt(process.env.DB_PORT || ''), // this is funky, prob do something else here
+    host: process.env.DB_HOST || '',
 };
 
 export const pool = createPool(dbconfig);
