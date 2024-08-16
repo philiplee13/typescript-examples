@@ -1,5 +1,10 @@
 ## Rest api built with node + typescript
 
+-   stack is
+    -   express
+    -   typescript
+    -   postgres
+
 ### Testing Requests
 
 -   GET `curl -x GET http://localhost:8000/users | jq`
