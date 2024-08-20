@@ -23,6 +23,4 @@ export class AppController {
         console.log("inside of get users within app controller")
         return this.userService.findAll();
     }
-
-
 }

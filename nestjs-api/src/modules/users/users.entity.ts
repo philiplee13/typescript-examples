@@ -15,4 +15,11 @@ export class UsersEntity {
 
     @Column()
     age: number;
+
+    constructor(name?: string, age?: number, userId?: string)
+    constructor(name: string, age: number, userId?: string) {
+        this.user_id = userId || '';
+        this.name = name;
+        this.age = age;
+    }
 }
