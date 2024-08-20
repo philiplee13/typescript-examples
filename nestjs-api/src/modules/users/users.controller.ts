@@ -10,7 +10,7 @@ import { UserService } from './users.service';
 import { CustomResponse } from '../common/responses/responses.model';
 import { UsersEntity } from './users.entity';
 
-@Controller('user')
+@Controller('users')
 export class UsersController {
     constructor(private userService: UserService) { }
 
